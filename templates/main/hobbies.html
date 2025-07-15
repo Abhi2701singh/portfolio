@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hobbies - Portfolio{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4 fw-bold">Hobbies & Interests</h1>
+                <p class="lead text-muted">What I enjoy doing outside of coding</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% if hobbies_list %}
+                {% for hobby in hobbies_list %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card hobby-card h-100">
+                            <div class="card-body text-center">
+                                <div class="hobby-icon">
+                                    {% if hobby.icon %}
+                                        <i class="{{ hobby.icon }}"></i>
+                                    {% else %}
+                                        <i class="fas fa-heart"></i>
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title">{{ hobby.title }}</h5>
+                                <p class="card-text">{{ hobby.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card hobby-card h-100">
+                        <div class="card-body text-center">
+                            <div class="hobby-icon">
+                                <i class="fas fa-chess"></i>
+                            </div>
+                            <h5 class="card-title">Chess</h5>
+                            <p class="card-text">I enjoy playing chess as it helps develop strategic thinking and problem-solving skills. It's a great way to exercise the mind and learn patience.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card hobby-card h-100">
+                        <div class="card-body text-center">
+                            <div class="hobby-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h5 class="card-title">Tech Trends</h5>
+                            <p class="card-text">I'm passionate about staying updated with the latest technology trends, attending tech conferences, and exploring emerging technologies.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card hobby-card h-100">
+                        <div class="card-body text-center">
+                            <div class="hobby-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h5 class="card-title">Hackathons</h5>
+                            <p class="card-text">Participating in hackathons is exciting as it combines creativity, teamwork, and rapid prototyping to solve real-world problems.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %} 

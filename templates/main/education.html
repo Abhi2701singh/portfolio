@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Education - Portfolio{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4 fw-bold">Education</h1>
+                <p class="lead text-muted">My academic journey and qualifications</p>
+            </div>
+        </div>
+        
+        {% if education_list %}
+            {% for education in education_list %}
+                <div class="education-card">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h4>{{ education.degree }}</h4>
+                            <h5 class="text-primary">{{ education.institution }}</h5>
+                            <p class="text-muted">{{ education.field_of_study }}</p>
+                            <p><i class="fas fa-calendar me-2"></i>{{ education.start_date|date:"F Y" }} - {% if education.end_date %}{{ education.end_date|date:"F Y" }}{% else %}Present{% endif %}</p>
+                            <p><i class="fas fa-map-marker-alt me-2"></i>{{ education.location }}</p>
+                            {% if education.cgpa %}
+                                <p><i class="fas fa-star me-2"></i>CGPA: {{ education.cgpa }}</p>
+                            {% endif %}
+                            
+                            {% if education.key_coursework %}
+                                <div class="coursework-tags">
+                                    {% for course in education.key_coursework.split %}
+                                        <span class="coursework-tag">{{ course }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
+                        <h5>No Education Added Yet</h5>
+                        <p class="text-muted">Education details will appear here once they are added through the admin panel.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

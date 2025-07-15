@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects - Portfolio{% endblock %}
+
+{% block content %}
+<!-- Projects Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4 fw-bold">My Projects</h1>
+                <p class="lead text-muted">A showcase of my work and achievements</p>
+            </div>
+        </div>
+        
+        <!-- Search and Filter -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <form method="get" class="d-flex">
+                    <input type="text" name="search" class="form-control me-2" placeholder="Search projects..." value="{{ search_query|default:'' }}">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="btn-group" role="group">
+                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}" class="btn btn-outline-primary {% if not status_filter %}active{% endif %}">All</a>
+                    <a href="?status=completed{% if search_query %}&search={{ search_query }}{% endif %}" class="btn btn-outline-success {% if status_filter == 'completed' %}active{% endif %}">Completed</a>
+                    <a href="?status=ongoing{% if search_query %}&search={{ search_query }}{% endif %}" class="btn btn-outline-warning {% if status_filter == 'ongoing' %}active{% endif %}">Ongoing</a>
+                    <a href="?status=planned{% if search_query %}&search={{ search_query }}{% endif %}" class="btn btn-outline-info {% if status_filter == 'planned' %}active{% endif %}">Planned</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Projects Grid -->
+        <div class="row">
+            {% if page_obj %}
+                {% for project in page_obj %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card project-card h-100" data-status="{{ project.status }}">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title">{{ project.title }}</h5>
+                                    <span class="badge {% if project.status == 'completed' %}bg-success{% elif project.status == 'ongoing' %}bg-warning{% else %}bg-info{% endif %} status-badge">
+                                        {{ project.status|title }}
+                                    </span>
+                                </div>
+                                <p class="card-text flex-grow-1">{{ project.short_description }}</p>
+                                
+                                <div class="tech-stack mb-3">
+                                    {% for tech in project.tech_stack.split|slice:":3" %}
+                                        <span class="tech-tag">{{ tech }}</span>
+                                    {% endfor %}
+                                    {% if project.tech_stack.split|length > 3 %}
+                                        <span class="tech-tag">+{{ project.tech_stack.split|length|add:"-3" }} more</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mt-auto">
+                                    {% if project.github_url %}
+                                        <a href="{{ project.github_url }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                            <i class="fab fa-github me-1"></i>Code
+                                        </a>
+                                    {% endif %}
+                                    {% if project.demo_url %}
+                                        <a href="{{ project.demo_url }}" class="btn btn-primary btn-sm" target="_blank">
+                                            <i class="fas fa-external-link-alt me-1"></i>Demo
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <i class="fas fa-project-diagram fa-3x text-muted mb-3"></i>
+                            <h5>No Projects Found</h5>
+                            <p class="text-muted">No projects match your current filters.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="Projects pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 
