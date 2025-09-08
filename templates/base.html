@@ -80,7 +80,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" role="main">
         {% if messages %}
             <div class="container mt-5 pt-5">
                 {% for message in messages %}
@@ -188,9 +188,10 @@
 </body>
 <!-- Footer Hover Styling -->
 <style>
-    .footer a.text-light:hover {
-        color: #ffc107 !important;
-    }
+    .footer a.text-light:hover { color: #ffc107 !important; }
+    /* Ensure body uses full height and content doesn't hide footer */
+    html, body { height: 100%; }
+    body { min-height: 100vh; }
 </style>
 
 
